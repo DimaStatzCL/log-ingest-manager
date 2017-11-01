@@ -1,17 +1,15 @@
 package factory
 
 import (
-	"strconv"
-	"time"
 	"fmt"
+	"time"
+	"../transport"
 )
 
 // Create channel by config
 func CreateTransport(out chan <- string) func() {
 	return func() {
-		for i := 0; i < 10; i++ {
-			out <- "a" + strconv.Itoa(i)
-		}
+		transport.CreateWebTransport(out)
 	}
 }
 
@@ -19,7 +17,7 @@ func CreateNormalizer(in <- chan string, out chan <- string) func() {
 	return func() {
 		for {
 			data := <-in
-			out <- data + "_norm"
+			out <- "NORMALIZED: " + data
 			time.Sleep(1000 * time.Millisecond)
 		}
 	}
